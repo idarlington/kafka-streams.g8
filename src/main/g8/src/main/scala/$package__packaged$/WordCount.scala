@@ -13,7 +13,7 @@ import org.apache.logging.log4j.scala.Logging
 
 /**
   * Before running this application,
-  * start your kafka broker(s) and create the required topics
+  * start your kafka cluster and create the required topics
   *
   * kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic streams-plaintext-input
   * kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic streams-wordcount-output
@@ -43,6 +43,7 @@ object WordCount extends App with Logging {
   val wordStream = new KafkaStreams(builder.build(), config)
   wordStream.start()
 
+  // attach shutdown handler to catch control-c
   sys.ShutdownHookThread {
     wordStream.close(10, TimeUnit.SECONDS)
   }
