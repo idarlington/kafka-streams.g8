@@ -11,6 +11,7 @@ lazy val root = (project in file(".")).settings(
     library.kafkaClients,
     library.kafkaStreams,
     library.log4jScala,
+    library.kafkaTest,
     library.scalaTest
   )
 )
@@ -27,5 +28,6 @@ lazy val library = new {
   val kafkaStreams = "org.apache.kafka"         %% "kafka-streams-scala" % version.kafkaVersion
   val log4jScala   = "org.apache.logging.log4j" % "log4j-api-scala_2.11" % version.log4jScala
 
-  val scalaTest = "org.scalatest" %% "scalatest" % version.scalaTest % "test"
+  val kafkaTest = "org.apache.kafka" % "kafka-streams-test-utils" % version.kafkaVersion
+  val scalaTest = "org.scalatest"    %% "scalatest"               % version.scalaTest % "test"
 }

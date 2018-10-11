@@ -4,14 +4,18 @@ import java.util.Properties
 import java.util.concurrent.TimeUnit
 
 import org.apache.kafka.clients.consumer.ConsumerConfig
-import org.apache.kafka.streams.{ KafkaStreams, StreamsConfig }
+import org.apache.kafka.streams.kstream.Printed
 import org.apache.kafka.streams.scala.ImplicitConversions._
 import org.apache.kafka.streams.scala.Serdes._
 import org.apache.kafka.streams.scala.StreamsBuilder
 import org.apache.kafka.streams.scala.kstream.{ KStream, KTable }
+import org.apache.kafka.streams.{ KafkaStreams, StreamsConfig }
 import org.apache.logging.log4j.scala.Logging
 
 /**
+  * A kafka streams application that reads records words from an input topic and counts the occurence of each word
+  * and outputs this count to a different topic
+  *
   * Before running this application,
   * start your kafka cluster and create the required topics
   *
@@ -28,19 +32,23 @@ object WordCount extends App with Logging {
   config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
   config.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-wordcount")
 
-  val builder = new StreamsBuilder()
+  def topology(): StreamsBuilder = {
+    val builder: StreamsBuilder = new StreamsBuilder
+    val textLines: KStream[String, String] =
+      builder.stream[String, String]("input-topic")
 
-  val textLines: KStream[String, String] =
-    builder.stream[String, String]("streams-plaintext-input")
+    val wordCount: KTable[String, Long] = textLines
+      .flatMapValues(words => words.split("\\\\W+"))
+      .groupBy((_, word) => word)
+      .count()
 
-  val wordCount: KTable[String, Long] = textLines
-    .flatMapValues(words => words.split("\\\\W+"))
-    .groupBy((_, word) => word)
-    .count()
+    wordCount.toStream.print(Printed.toSysOut[String, Long])
+    wordCount.toStream.to("streams-wordcount-output")
 
-  wordCount.toStream.to("streams-wordcount-output")
+    builder
+  }
 
-  val wordStream = new KafkaStreams(builder.build(), config)
+  val wordStream = new KafkaStreams(topology().build(), config)
   wordStream.start()
 
   // attach shutdown handler to catch control-c
