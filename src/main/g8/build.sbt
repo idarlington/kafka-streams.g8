@@ -25,7 +25,7 @@ lazy val library = new {
 
   val kafkaClients = "org.apache.kafka"         % "kafka-clients"        % version.kafkaVersion
   val kafkaStreams = "org.apache.kafka"         %% "kafka-streams-scala" % version.kafkaVersion
-  val scalaTest    = "org.scalatest"            %% "scalatest"           % version.scalaTest % "test"
   val log4jScala   = "org.apache.logging.log4j" % "log4j-api-scala_2.11" % version.log4jScala
 
+  val scalaTest = "org.scalatest" %% "scalatest" % version.scalaTest % "test"
 }
