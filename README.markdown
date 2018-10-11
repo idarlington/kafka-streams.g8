@@ -1,4 +1,11 @@
-A [Giter8][g8] template for kafka streams scala application
+A [Giter8][g8] template for kafka streams scala application.
+
+This template uses kafka-streams library from Apache Kafka.
+
+## Running
+```bash
+sbt new idarlington/kafka-streams.g8
+```
 
 Template license
 ----------------
