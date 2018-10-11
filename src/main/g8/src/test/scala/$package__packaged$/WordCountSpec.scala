@@ -1,5 +1,6 @@
 package $package$
 
+import java.lang.Long
 import java.util.Properties
 
 import org.apache.kafka.common.serialization._
@@ -30,12 +31,12 @@ class WordCountSpec extends WordSpec with Matchers with BeforeAndAfterAll {
       OutputVerifier.compareKeyValue(
         testDriver.readOutput("streams-wordcount-output", stringDeserializer, longDeserializer),
         "kafka",
-        1L: java.lang.Long
+        1L: Long
       )
       OutputVerifier.compareKeyValue(
         testDriver.readOutput("streams-wordcount-output", stringDeserializer, longDeserializer),
         "kafka",
-        2L: java.lang.Long
+        2L: Long
       )
     }
   }
