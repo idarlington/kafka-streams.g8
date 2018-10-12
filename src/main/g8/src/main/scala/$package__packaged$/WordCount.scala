@@ -10,7 +10,6 @@ import org.apache.kafka.streams.scala.Serdes._
 import org.apache.kafka.streams.scala.StreamsBuilder
 import org.apache.kafka.streams.scala.kstream.{ KStream, KTable }
 import org.apache.kafka.streams.{ KafkaStreams, StreamsConfig }
-import org.apache.logging.log4j.scala.Logging
 
 /**
   * A kafka streams application that reads records words from an input topic and counts the occurence of each word
@@ -19,11 +18,11 @@ import org.apache.logging.log4j.scala.Logging
   * Before running this application,
   * start your kafka cluster and create the required topics
   *
-  * kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic streams-plaintext-input
+  * kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic input-topic
   * kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic streams-wordcount-output
   *
   */
-object WordCount extends App with Logging {
+object WordCount extends App {
 
   val config = new Properties()
 
