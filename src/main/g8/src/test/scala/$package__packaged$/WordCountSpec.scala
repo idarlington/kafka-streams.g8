@@ -15,10 +15,10 @@ class WordCountSpec extends WordSpec with Matchers with BeforeAndAfterAll {
   private val longDeserializer   = new LongDeserializer
 
   val props = new Properties()
-  props.put(StreamsConfig.APPLICATION_ID_CONFIG, "word-count")
-  props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "dummy:1234")
+  props.put(StreamsConfig.APPLICATION_ID_CONFIG, StreamSettings.appID)
+  props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, StreamSettings.bootstrapServers)
 
-  val recordFactory = new ConsumerRecordFactory[String, String]("input-topic",
+  val recordFactory = new ConsumerRecordFactory[String, String](StreamSettings.inputTopic,
                                                                 new StringSerializer,
                                                                 new StringSerializer)
 
@@ -27,14 +27,14 @@ class WordCountSpec extends WordSpec with Matchers with BeforeAndAfterAll {
 
   "WordCount" should {
     "count words correctly" in {
-      testDriver.pipeInput(recordFactory.create("input-topic", "", "kafka kafka"))
+      testDriver.pipeInput(recordFactory.create(StreamSettings.inputTopic, "", "kafka kafka"))
       OutputVerifier.compareKeyValue(
-        testDriver.readOutput("streams-wordcount-output", stringDeserializer, longDeserializer),
+        testDriver.readOutput(StreamSettings.outputTopic, stringDeserializer, longDeserializer),
         "kafka",
         1L: Long
       )
       OutputVerifier.compareKeyValue(
-        testDriver.readOutput("streams-wordcount-output", stringDeserializer, longDeserializer),
+        testDriver.readOutput(StreamSettings.outputTopic, stringDeserializer, longDeserializer),
         "kafka",
         2L: Long
       )

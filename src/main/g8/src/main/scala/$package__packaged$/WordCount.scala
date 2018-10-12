@@ -12,7 +12,7 @@ import org.apache.kafka.streams.scala.kstream.{ KStream, KTable }
 import org.apache.kafka.streams.{ KafkaStreams, StreamsConfig }
 
 /**
-  * A kafka streams application that reads records words from an input topic and counts the occurence of each word
+  * A kafka streams application that reads records words from an input topic and counts the occurrence of each word
   * and outputs this count to a different topic
   *
   * Before running this application,
@@ -25,16 +25,15 @@ import org.apache.kafka.streams.{ KafkaStreams, StreamsConfig }
 object WordCount extends App {
 
   val config = new Properties()
-
   // setting offset reset to earliest so that we can re-run the app with same data
-  config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
-  config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
-  config.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-wordcount")
+  config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, StreamSettings.autoResetConfig)
+  config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, StreamSettings.bootstrapServers)
+  config.put(StreamsConfig.APPLICATION_ID_CONFIG, StreamSettings.appID)
 
   def topology(): StreamsBuilder = {
     val builder: StreamsBuilder = new StreamsBuilder
     val textLines: KStream[String, String] =
-      builder.stream[String, String]("input-topic")
+      builder.stream[String, String](StreamSettings.inputTopic)
 
     val wordCount: KTable[String, Long] = textLines
       .flatMapValues(words => words.split("\\\\W+"))
@@ -42,7 +41,7 @@ object WordCount extends App {
       .count()
 
     wordCount.toStream.print(Printed.toSysOut[String, Long])
-    wordCount.toStream.to("streams-wordcount-output")
+    wordCount.toStream.to(StreamSettings.outputTopic)
 
     builder
   }
