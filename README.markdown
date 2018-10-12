@@ -9,7 +9,7 @@ sbt new idarlington/kafka-streams.g8
 
 Template license
 ----------------
-Written in 2018 by [Ogbajie Ikenna](twitter.com/idarlington)
+Written in 2018 by [Ogbajie Ikenna](https://twitter.com/idarlington)
 
 To the extent possible under law, the author(s) have dedicated all copyright and related
 and neighboring rights to this template to the public domain worldwide.
