@@ -4,7 +4,7 @@ This template uses kafka-streams library from Apache Kafka.
 
 ## Running
 ```bash
-sbt new idarlington/kafka-streams.g8
+sbt new lunatech-labs/kafka-streams.g8
 ```
 
 Template license
