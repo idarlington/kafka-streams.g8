@@ -29,6 +29,9 @@ object WordCount extends App {
   config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, StreamSettings.autoResetConfig)
   config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, StreamSettings.bootstrapServers)
   config.put(StreamsConfig.APPLICATION_ID_CONFIG, StreamSettings.appID)
+  // max cache buffering set to 0
+  // preferable during development, update value for production use
+  config.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0L: java.lang.Long)
 
   def topology(): StreamsBuilder = {
     val builder: StreamsBuilder = new StreamsBuilder
